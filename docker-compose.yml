@@ -1,0 +1,31 @@
+version: '3.5'
+
+services:
+  math-service:
+    build:
+      context: .
+      dockerfile: ./math-service/build/Dockerfile
+    container_name: math-service
+    ports:
+      - '3001:3001'
+    networks:
+      - nest-dev
+    volumes:
+      - ./math-service/src:/app/src
+  client:
+    build:
+      context: .
+      dockerfile: ./client/build/Dockerfile
+    container_name: client
+    ports:
+      - '3000:3000'
+    networks:
+      - nest-dev
+    depends_on:
+      - math-service
+    volumes:
+      - ./client/src:/app/src
+
+networks:
+  nest-dev:
+    driver: bridge
